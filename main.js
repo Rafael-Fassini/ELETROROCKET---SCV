@@ -1,3 +1,4 @@
+const { ipcMain } = require('electron');
 const { app, BrowserWindow } = require('electron/main');
 
 const createWindow = () => {
@@ -7,7 +8,9 @@ const createWindow = () => {
   });
 
   win.loadFile('views/mainMenu.html');
+
 };
+
 
 app.whenReady().then(() => {
   createWindow();
@@ -24,3 +27,30 @@ app.on('window-all-closed', () => {
     app.quit();
   };
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
