@@ -1,0 +1,51 @@
+#interfaceVoo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85vw; /* Largura da tabela como 100% da largura da tela */
+    max-width: 85vw; /* Largura máxima da tabela */
+    height: 80vh; /* Altura da tabela como 80% da altura da tela */
+    max-height: 70vh; /* Altura máxima da tabela */
+    margin-top: 40px;
+    background-color: #242424;
+    border-radius: 20px;
+    border-collapse: separate; /* Garante que as bordas das células não sejam mescladas */
+    border-spacing: 10px; 
+}
+
+
+.IDFormatacaoDadosVoo {
+    color: white;
+    font-size: 2em; /* Tamanho de fonte responsivo */
+    font-family: 'Orbitron';
+    text-align: center;
+    margin-top: 40px; /* Ajuste de espaçamento */
+    text-align: center;
+    position: relative;
+    top: -20px;
+}
+
+td {
+    background-color: #242424;
+    border-radius: 20px;
+    text-align: left;
+    vertical-align: top;
+    height: 25vh;
+    width: 80vh;
+    background-color: transparent;
+}
+
+
+.tempoVoo p, .monitor p, .velocidade p, .altimetro p, .giroscopio p, .pressao p, .temperatura p, .gps p {
+    font-size: 1.5em; /* Tamanho de fonte responsivo */
+    font-family: 'Orbitron';
+    color: white;
+    font-weight: bold;
+    top: -20px;
+    position: relative;
+}
+
+table {
+    border-color: #242424;
+}

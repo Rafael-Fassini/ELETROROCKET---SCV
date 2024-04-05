@@ -21,19 +21,56 @@
     </div>
     
     <div class="formularioCriarMissao">
-      <table align="center">
-        <form>
-          <tr> <td> <input type="text" id="nomeMissao" placeholder="NOME DA MISSÃO"> </td> <td> <input type="date" id="data" placeholder="DATA"> </td> </tr> 
-          <tr> <td> <input type="text" id="ObjetivoMissao" placeholder="OBJETIVO"> </td> <td> <input type="time" id="hora" placeholder="HORA"> </td> </tr>
-          <tr> <td> <input type="text" id="altitudeMaximaPrevistaMissao" placeholder="MÁXIMA ALTITUDE PREVISTA"> </td> <td> <input type="text" id="localizacao" placeholder="COORDENADAS DO PAD DE LANÇAMENTO"> </td> </tr>
-        </form>
-      </div>
-    </table>
+      <table align="center" width="">
+          <form>
+              <tr>
+                  <td>
+                      <input type="text" id="nomeMissao" placeholder="NOME DA MISSÃO" maxlength="54" onkeypress="proximoCampo(event, 'objetivoMissao')" required>
+                  </td>
+                  <td colspan="2">
+                      <input type="text" id="latitude" placeholder="LATITUDE N (graus NORTE)" onblur="verificarFormatoLatitude()" onkeypress="verificarFormatoLatitude(event, 'longitude')" required>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <textarea maxlength="530" id="objetivoMissao" placeholder="OBJETIVO DA MISSÃO" onkeypress="proximoCampo(event, 'apogeuPrevisto')" required></textarea>
+                  </td>
+                  <td colspan="2">
+                      <input type="text" id="longitude" placeholder="LONGITUDE E (graus LESTE)" onblur="verificarFormatoLongitude()" onkeypress="verificarFormatoLongitude(event)" required>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <input type="text" maxlength="54" id="apogeuPrevisto" placeholder="APOGEU PREVISTO (em metros)" oninput="verificarNumerosCampos('apogeuPrevisto')" onkeypress="proximoCampo(event, 'latitude')" required>
+                  </td>
+                  <td>
+                      <input type="time" id="hora">
+                  </td>
+                  <td>
+                      <input type="date" id="data">
+                  </td>
+              </tr>
+          </form>
+      </table>
+  </div>
 
+  <div class="btnSalvarFormulario">
+     <input type="button" id="btnSalvarFormulario" value="SALVAR" onclick="openPopup()">
+  </div>
 
+  <div class="popup-container" id="popupContainer">
+    <div class="popup-box">
+        <p>TEM CERTEZA DE QUE DESEJA SALVAR?</p>
+        <div class="popup-buttons">
+            <button class="confirm-button" onclick="confirmAction()">Salvar</button>
+            <button class="cancel-button" onclick="cancelAction()">Cancelar</button>
+        </div>
+    </div>
+</div>
 
     <script src="../main.js"></script>
-  </body>
+    <script src="VerificacoesCamposFrontEnd.js"></script>
+    <script src="animacoes.js"></script>
     
 </body>
 </html>

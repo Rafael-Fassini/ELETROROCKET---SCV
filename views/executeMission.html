@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="styleExecuteMission.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     <title>Executar Missão</title>
 </head>
 <body>
@@ -19,10 +23,75 @@
     <div class="sidebar">
       <button type="button" id="btnSidebar">
     </div>
-  
 
-    
-    
+    <div class="container">
+      <table border="1" id="interfaceVoo">
+        <tr>
+            <td>
+                <div class="monitor">
+                    <p>MONITOR:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">teste</p>
+            </td>
+            <td colspan="2" id="testecel">
+                <div class="tempoVoo">
+                    <p>TEMPO DE VOO:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">00:00:00</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="velocidade">
+                    <p>VELOCIDADE:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">0000,00 m/s</p>
+            </td>
+            <td>
+                <div class="altimetro">
+                    <p>ALTÍMETRO:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">0000 metros</p>
+            </td>
+            <td>
+                <div class="giroscopio">
+                    <p>GIROSCÓPIO:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">grafico</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="pressao">
+                    <p>PRESSÃO:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">0000 psi</p>
+            </td>
+            <td>
+                <div class="temperatura">
+                    <p>TEMPERATURA:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">000 °C</p>
+            </td>
+            <td>
+                <div class="gps">
+                    <p>GPS:</p>
+                    <br>
+                </div>
+                <p class="IDFormatacaoDadosVoo">LATITUDE N:</p>
+                <p class="IDFormatacaoDadosVoo">LONGITUDE E:</p>
+            </td>
+        </tr>
+    </table>  
+  </div>
+  
     <script src="../main.js"></script>
   </body>
     
