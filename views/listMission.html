@@ -2,8 +2,17 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="stylePadraoPaginas.css">
+    <link rel="stylesheet" type="text/css" href="styleListMission.css">
     <title>Lista de Missões</title>
 </head>
 <body>
@@ -17,14 +26,18 @@
     </div>
 
     <div class="sidebar">
-      <button type="button" id="btnSidebar">
+      <button type="button" id="btnSideBar">
     </div>
-  
 
-    
-    
-    <script src="../main.js"></script>
-  </body>
-    
+    <div class="resgatarMissoesCadastradas">
+      <input type="button" id="btnResgatarMissoesCadastradas" value="BUSCAR">
+    </div>
+
+   
+    <div class="content-list-missions" id="listMissions">
+    </div>  
+
+    <script src="renderer.js"></script>
+    <script src="mostrarMissoesCadastradas.js"></script>
 </body>
 </html>

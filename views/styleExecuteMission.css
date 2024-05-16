@@ -15,7 +15,7 @@
 }
 
 
-.IDFormatacaoDadosVoo {
+.FormatacaoDadosVoo {
     color: white;
     font-size: 2em; /* Tamanho de fonte responsivo */
     font-family: 'Orbitron';
@@ -26,18 +26,8 @@
     top: -20px;
 }
 
-td {
-    background-color: #242424;
-    border-radius: 20px;
-    text-align: left;
-    vertical-align: top;
-    height: 25vh;
-    width: 80vh;
-    background-color: transparent;
-}
 
-
-.tempoVoo p, .monitor p, .velocidade p, .altimetro p, .giroscopio p, .pressao p, .temperatura p, .gps p {
+.acelerometro p, .velocidade p, .altimetro p, .giroscopio p, .pressao p, .temperatura p, .gps p, .foguete3d p {
     font-size: 1.5em; /* Tamanho de fonte responsivo */
     font-family: 'Orbitron';
     color: white;
@@ -46,6 +36,8 @@ td {
     position: relative;
 }
 
-table {
-    border-color: #242424;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -2,7 +2,7 @@
   "name": "my-electron-app",
   "version": "1.0.0",
   "description": "Projeto EletroRocket",
-  "main": "main.js",
+  "main": "mainProcess/main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,11 @@
   "author": "Rafael Fassini Menoce",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^29.1.0"
+    "electron": "^30.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "three": "^0.164.1"
   }
 }

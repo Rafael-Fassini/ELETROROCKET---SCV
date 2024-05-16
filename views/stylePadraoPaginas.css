@@ -23,6 +23,7 @@ body {
     color: transparent;
     margin-top: -10px; 
     margin-bottom: 10px; 
+    transition: width 0.5s ease;
 }
 
 .scv-conteudo {
@@ -37,6 +38,7 @@ body {
     padding: 0;
     font-size: 13pt;
     margin-top: -30px;
+    transition: width 0.5s ease;
 }
 
 .logo-eletrorocket {
@@ -45,6 +47,44 @@ body {
 
 .logo-eletrorocket img {
     width: 100px;
+    transition: width 0.5s ease;
+}
+
+
+/* Estilos para telas menores */
+@media screen and (max-width: 768px) {
+    .SCV {
+        margin-top: 20px; /* Ajusta a margem superior */
+    }
+
+    .scv-titulo {
+        font-size: 70px !important; /* Reduz o tamanho da fonte */
+    }
+
+    .logo-eletrorocket img {
+        width: 60px; /* Reduz o tamanho da imagem */
+    }
+    .scv-descricao {
+        font-size: 11px;
+        margin-top: -18px;
+    }
+}
+
+
+/* Estilos para telas maiores */
+@media screen and (min-width: 769px) {
+    .SCV {
+        text-align: left; /* Alinha o conteúdo à esquerda */
+        margin-top: -10px; /* Mantém a margem superior original */
+    }
+
+    .scv-titulo {
+        font-size: 112px !important; /* Retorna ao tamanho original da fonte */
+    }
+
+    .logo-eletrorocket img {
+        width: 100px; /* Retorna ao tamanho original da imagem */
+    }
 }
 
 
@@ -151,8 +191,8 @@ body {
     transform: translateY(-50%);
 }
 
-#btnSidebar {
-    padding: 370px 18px;
+#btnSideBar {
+    padding: 38vh 2vh;
     margin-left: 5px;
     margin-top: 130px;
     background-color: #6D6D6D;
@@ -166,11 +206,11 @@ body {
     position: relative;
 }
 
-#btnSidebar:hover {
+#btnSideBar:hover {
     background-color: crimson; 
 }
 
-#btnSidebar::after {
+#btnSideBar::after {
     content: "Voltar ao Menu"; 
     position: absolute; 
     top: 20%; 
@@ -183,11 +223,11 @@ body {
     display: none;
 }
 
-#btnSidebar:hover::after {
+#btnSideBar:hover::after {
     display: block; 
 }
 
-#btnSidebar:active {
+#btnSideBar:active {
     transform: translateY(2px);
 }
 
@@ -254,7 +294,7 @@ textarea {
     overflow: hidden;
 }
 
-#data:hover, #hora:hover, #nomeMissao:hover, #objetivoMissao:hover, #apogeuPrevisto:hover, #latitude:hover, #longitude:hover {
+#data:hover, #hora:hover, #nomeMissao:hover, #objetivoMissao:hover, #apogeuPrevisto:hover, #altitudeRelacaoNivelMar:hover {
     border-color: crimson;
     
 }

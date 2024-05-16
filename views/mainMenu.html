@@ -2,8 +2,16 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+  />
+  <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+  />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="stylePadraoPaginas.css">
   <title>Menu Principal</title>
 </head>
 <body>
@@ -36,8 +44,7 @@
     <input type="button" value="AJUDA">
   </div>
   
-  <script src="../main.js"></script>
-  <script src="pageRedirector.js"></script>
+  <script src="renderer.js"></script>
 
 </body>
 </html>
