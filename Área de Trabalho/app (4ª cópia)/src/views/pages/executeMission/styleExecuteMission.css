@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #000;
+    color: white;
+}
+
+#stopButton {
+    background-color: red;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 1vh;
+}
+
+.buttons button {
+    background-color: green;
+    border: none;       
+    border-radius: 10px;
+    color: white;
+    font-size: 1.3em;
+    padding: 2vh 6vh;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttons button:hover {
+    background-color: green;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;                                                   
+}
+
+
+.row > div {
+    background-color: #242424;
+    border-radius: 10px;
+    margin: 10px;
+    flex: 1 1 30%;
+    min-width: 250px; 
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+.FormatacaoDadosVoo {
+    color: white;
+    font-size: 2em;
+    margin-top: 20px;
+}
+
+.container p {
+    font-size: 1.5em;
+    font-weight: bold;
+}
