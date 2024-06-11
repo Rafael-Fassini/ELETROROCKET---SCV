@@ -1,0 +1,106 @@
+/* Estilos para os cards das missões */
+.content-mission {
+    border-radius: 15px;
+    border: 4px solid red; /* Inicialmente todos os cards serão vermelhos */
+    background-color: #f5f5f5; /* Fundo claro para contraste */
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5vw;
+    margin: 2% auto; /* Margem superior e inferior para espaçamento */
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
+    padding: 20px;
+    align-items: center; 
+    flex-direction: column;
+    cursor: pointer; /* Tornar os cards clicáveis */
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+    height: auto; /* Ajustar altura automaticamente */
+    width: 90%; /* Ajustar largura dos cards */
+}
+
+.content-mission:hover {
+    transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra mais intensa ao passar o mouse */
+}
+
+.content-list-missions {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 80vh; /* Limitar a altura da área de conteúdo */
+    overflow-y: auto; /* Adicionar rolagem vertical */
+    margin-bottom: 50px; /* Espaçamento inferior para evitar corte */
+}
+
+.content-mission table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse; /* Remover espaçamento entre as células */
+}
+
+.content-mission table td {
+    text-align: justify;
+    padding: 10px;
+    font-size: 1.2vw; /* Tamanho de fonte ajustado */
+}
+
+/* Estilos para a legenda */
+.legend-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.legend-item div {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.legend-item.red div {
+    background-color: red;
+}
+
+.legend-item.green div {
+    background-color: green;
+}
+
+/* Estilos para o botão Buscar */
+.resgatarMissoesCadastradas {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#btnResgatarMissoesCadastradas {
+    background-color: #4CAF50; /* Verde */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2vw;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+}
+
+#btnResgatarMissoesCadastradas:hover {
+    background-color: #45a049; /* Verde escuro */
+}
+
+#popupContainerOpenLaunchPanel {
+    display: none;
+}

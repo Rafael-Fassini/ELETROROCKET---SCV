@@ -1,0 +1,21 @@
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "description": "Projeto EletroRocket",
+  "main": "src/electron/main.js",
+  "scripts": {
+    "start": "electron --require dotenv/config .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rafael Fassini Menoce",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^30.0.8"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "env-var": "^7.4.1",
+    "pg": "^8.11.5",  
+    "three": "^0.164.1"
+  }
+}
