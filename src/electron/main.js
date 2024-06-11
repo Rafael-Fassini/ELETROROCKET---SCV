@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
-const { insertDataCreateMissionInDB, selectDataCreateMissionInDB } = require('./database.js');
+const { insertDataCreateMissionInDB, selectDataCreateMissionInDB } = require('../repositories/database.js');
 const { error } = require('node:console');
 
 
@@ -11,7 +11,9 @@ const createWindow = (routehtmlPage) => {
   if (!mainWindow) {
     mainWindow = new BrowserWindow({
       width: 800,
-      height: 600,
+      height: 800,
+      minWidth: 800,
+      minHeight: 800,
       webPreferences: { 
         preload: path.join(__dirname, 'preload.js')
       }
@@ -27,19 +29,24 @@ const createWindow = (routehtmlPage) => {
   }
 };
 
+
 app.whenReady().then(() => {
-  createWindow('views/mainMenu.html');
+  createWindow(path.join('src', 'views', 'pages', 'mainMenu.html'));
 
   ipcMain.handle('abrirJanelaCriarMissao', () => {
-    createWindow('views/createMission.html');
+    createWindow(path.join('src', 'views', 'createMission', 'createMission.html'));
+  });
+
+  ipcMain.handle('openWindowExecuteMission', () => {
+    createWindow(path.join('src', 'views', 'pages', 'executeMission', 'executeMission.html'));
   });
 
   ipcMain.handle('abrirJanelaSelecionarMissao', () => {
-    createWindow('views/listMission.html');
+    createWindow(path.join('src', 'views', 'pages', 'listMission', 'listMission.html'));
   });
 
   ipcMain.handle('voltarAoMenuPrincipal', () => {
-    createWindow('views/mainMenu.html');
+    createWindow(path.join('src', 'views', 'pages', 'mainMenu.html'));
   });
 
   ipcMain.on('submit-form', async(event, formData) => {

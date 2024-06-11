@@ -1,14 +1,15 @@
-document.getElementById("cadastroMissao").addEventListener("submit", (event) => {
-    event.preventDefault();
-    console.log('passei');
+import { clearFormCriarMissao } from "../components/animacoes.js";
+
+
+function saveFormDataInDataBase() {
     try {
         const formData = getFormData();
-        console.log(formData);
         window.electronAPI.submitForm(formData);
     } catch (error) {
         console.error("erro capturar dados", error);
     };
-});
+};
+
 
 function getFormData() {
     const formData = {
@@ -20,6 +21,14 @@ function getFormData() {
         data: document.getElementById("data").value
     };
 
+    formData.hora = formData.hora + ":00";
+
     return formData;
 };
 
+
+document.getElementById("confirmButton").addEventListener('click', () => {
+    saveFormDataInDataBase();
+    alert("Cadastro realizado com sucesso!");
+    clearFormCriarMissao();
+});

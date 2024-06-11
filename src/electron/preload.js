@@ -1,12 +1,17 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  
   abrirJanelaCriarMissao: () => {
     ipcRenderer.invoke('abrirJanelaCriarMissao');
   },
 
   abrirJanelaSelecionarMissao: () => {
     ipcRenderer.invoke('abrirJanelaSelecionarMissao');
+  },
+
+  openWindowExecuteMission: () => {
+    ipcRenderer.invoke('openWindowExecuteMission');
   },
 
   submitForm: async (formData) => {

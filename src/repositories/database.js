@@ -1,11 +1,13 @@
 const { Pool } = require('pg');
+require('dotenv').config();
+
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'postgresql8877',
-  port: 5432
+  user: process.env.BD_USER,
+  host: process.env.BD_HOST,
+  database: process.env.BD_NAME,
+  password: process.env.BD_PASS,
+  port: process.env.BD_PORT
 });
 
 const insertDataCreateMissionInDB = async (formData) => {
@@ -16,7 +18,6 @@ const insertDataCreateMissionInDB = async (formData) => {
     console.error('Erro ao inserir no banco de dados:', error);
   };
 };
-
 
 const selectDataCreateMissionInDB = async () => {
   try {
