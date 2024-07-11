@@ -1,4 +1,4 @@
-import { clearFormCriarMissao } from "../components/animacoes.js";
+import { clearFormCriarMissao } from "../../components/animacoes.js";
 
 
 function saveFormDataInDataBase() {

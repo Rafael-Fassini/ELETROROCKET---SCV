@@ -31,22 +31,22 @@ const createWindow = (routehtmlPage) => {
 
 
 app.whenReady().then(() => {
-  createWindow(path.join('src', 'views', 'pages', 'mainMenu.html'));
+  createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'mainMenu.html'));
 
   ipcMain.handle('abrirJanelaCriarMissao', () => {
-    createWindow(path.join('src', 'views', 'createMission', 'createMission.html'));
+    createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'createMission', 'createMission.html'));
   });
 
   ipcMain.handle('openWindowExecuteMission', () => {
-    createWindow(path.join('src', 'views', 'pages', 'executeMission', 'executeMission.html'));
+    createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'executeMission', 'executeMission.html'));
   });
 
   ipcMain.handle('abrirJanelaSelecionarMissao', () => {
-    createWindow(path.join('src', 'views', 'pages', 'listMission', 'listMission.html'));
+    createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'listMission', 'listMission.html'));
   });
 
   ipcMain.handle('voltarAoMenuPrincipal', () => {
-    createWindow(path.join('src', 'views', 'pages', 'mainMenu.html'));
+    createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'mainMenu.html'));
   });
 
   ipcMain.on('submit-form', async(event, formData) => {
