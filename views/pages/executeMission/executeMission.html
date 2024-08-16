@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
     <link rel="stylesheet" type="text/css" href="../../styles/stylePadraoPaginas.css">
     <link rel="stylesheet" type="text/css" href="styleExecuteMission.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     <title>Executar Missão</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
 </head>
 <body>
     <div class="buttons">
@@ -16,47 +24,270 @@
         <button id="stopButton">Stop</button>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="tempo">
-                <p>TEMPO:</p>
-                <p class="FormatacaoDadosVoo">00:00:00</p>
-            </div>
-            <div class="foguete3d">
-                <p>FOGUETE 3D:</p>
-                <p class="FormatacaoDadosVoo">desenho 3d</p>
-            </div>
+        <div class="foguete3d">
+            <p>FOGUETE 3D:</p>
+            <p class="FormatacaoDadosVoo">desenho 3d</p>
         </div>
-        <div class="row">
-            <div class="velocidade">
-                <p>VELOCIDADE:</p>
-                <p class="FormatacaoDadosVoo">0000,00 m/s</p>
-            </div>
-            <div class="altimetro">
-                <p>ALTÍMETRO:</p>
-                <p class="FormatacaoDadosVoo">0000 metros</p>
-            </div>
-            <div class="giroscopio">
-                <p>GIROSCÓPIO:</p>
-                <p class="FormatacaoDadosVoo">gráfico 3d trajetória</p>
-            </div>
+        <div class="velocidade">
+            <p>VELOCIDADE (m/s):</p>
+            <div id="velocityChart"></div>
         </div>
-        <div class="row">
-            <div class="pressao">
-                <p>PRESSÃO:</p>
-                <p class="FormatacaoDadosVoo">0000 psi</p>
-            </div>
-            <div class="temperatura">
-                <p>TEMPERATURA:</p>
-                <p class="FormatacaoDadosVoo">000 °C</p>
-            </div>
-            <div class="gps">
-                <p>GPS:</p>
-                <p class="FormatacaoDadosVoo">LATITUDE N:</p>
-                <p class="FormatacaoDadosVoo">LONGITUDE E:</p>
-            </div>
+        <div class="altimetro">
+            <p>ALTITUDE (metros):</p>
+            <div id="altitudeChart"></div>
+        </div>
+        <div class="giroscopio">
+            <p>GIROSCÓPIO:</p>
+            <p class="FormatacaoDadosVoo">gráfico 3d trajetória</p>
+        </div>
+        <div class="pressao">
+            <p>PRESSÃO (Pa):</p>
+            <div id="pressureChart"></div>
+        </div>
+        <div class="temperatura">
+            <p>TEMPERATURA (°C):</p>
+            <div id="temperatureChart"></div>
+        </div>
+        <div class="gps">
+            <div id="map"></div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="../../components/renderer.js"></script>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+
+        ws.onopen = () => {
+            console.log('Conectado ao servidor WebSocket');
+        };
+
+        ws.onerror = (error) => {
+            console.error('Erro no WebSocket:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('Conexão WebSocket fechada');
+        };
+
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var markerPosicaoFoguete = L.marker([51.5, -0.09]).addTo(map);
+
+        var circle = L.circle([51.5, -0.09], {
+            color: 'blue',
+            fillOpacity: 0.1,
+            radius: 500
+        }).addTo(map);
+
+        circle.bindPopup("Área de lançamento");
+        markerPosicaoFoguete.bindPopup("Posição do Foguete");
+
+        let temperatureData = [];
+        let velocityData = [];
+        let altitudeData = [];
+        let pressureData = [];
+        const MAX_DATA_POINTS = 50;
+
+        const chartOptions = {
+            chart: {
+                id: 'realtime',
+                height: 350,
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                events: {
+                    mouseMove: () => {}, 
+                    mouseClick: () => {}, 
+                    mouseLeave: () => {} 
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            markers: {
+                size: 0 
+            },
+            xaxis: {
+                type: 'datetime',
+                labels: {
+                    datetimeUTC: false,
+                    style: {
+                        fontSize: '17px', 
+                        color: '#242424' 
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '17px',
+                        color: '#242424'
+                    }
+                }
+            },
+            legend: {
+                show: false
+            },
+            tooltip: {
+                enabled: false
+            }
+        };
+
+        const chartOptionsTemperature = {
+            ...chartOptions,
+            series: [{
+                name: "Temperatura",
+                data: []
+            }],
+            yaxis: {
+                min: 0
+            }
+        };
+
+        const chartOptionsVelocity = {
+            ...chartOptions,
+            series: [{
+                name: "Velocidade",
+                data: []
+            }],
+            yaxis: {
+                min: 0
+            }
+        };
+
+        const chartOptionsAltitude = {
+            ...chartOptions,
+            series: [{
+                name: "Altitude",
+                data: []
+            }],
+            yaxis: {
+                min: 0
+            }
+        };
+
+        const chartOptionsPressure = {
+            ...chartOptions,
+            series: [{
+                name: "Pressão",
+                data: []
+            }],
+            yaxis: {
+                min: 0
+            }
+        };
+
+        const temperatureChart = new ApexCharts(document.querySelector("#temperatureChart"), chartOptionsTemperature);
+        temperatureChart.render();
+
+        const velocityChart = new ApexCharts(document.querySelector("#velocityChart"), chartOptionsVelocity);
+        velocityChart.render();
+
+        const altitudeChart = new ApexCharts(document.querySelector("#altitudeChart"), chartOptionsAltitude);
+        altitudeChart.render();
+
+        const pressureChart = new ApexCharts(document.querySelector("#pressureChart"), chartOptionsPressure);
+        pressureChart.render();
+
+        function updateCharts() {
+            temperatureChart.updateSeries([{
+                name: "Temperatura",
+                data: temperatureData
+            }]);
+
+            velocityChart.updateSeries([{
+                name: "Velocidade",
+                data: velocityData
+            }]);
+
+            altitudeChart.updateSeries([{
+                name: "Altitude",
+                data: altitudeData
+            }]);
+
+            pressureChart.updateSeries([{
+                name: "Pressão",
+                data: pressureData
+            }]);
+        }
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            console.log('Mensagem recebida do servidor:', message);
+
+            if (message.type === 'data') {
+                const { time, GPSlat, GPSlng, altitude, GPSspeed, pressao, temperatura } = message.value;
+
+                // Atualizando dados de temperatura
+                temperatura.forEach((temp, index) => {
+                    temperatureData.push({ x: time[index], y: parseFloat(temp) });
+                    if (temperatureData.length > MAX_DATA_POINTS) {
+                        temperatureData.shift();
+                    }
+                });
+
+                // Atualizando dados de altitude
+                altitude.forEach((alt, index) => {
+                    altitudeData.push({ x: time[index], y: parseFloat(alt) });
+                    if (altitudeData.length > MAX_DATA_POINTS) {
+                        altitudeData.shift();
+                    }
+                });
+
+                // Atualizando dados de velocidade
+                GPSspeed.forEach((speed, index) => {
+                    velocityData.push({ x: time[index], y: parseFloat(speed) });
+                    if (velocityData.length > MAX_DATA_POINTS) {
+                        velocityData.shift();
+                    }
+                });
+
+                // Atualizando dados de pressão
+                pressao.forEach((pressure, index) => {
+                    pressureData.push({ x: time[index], y: parseFloat(pressure) });
+                    if (pressureData.length > MAX_DATA_POINTS) {
+                        pressureData.shift();
+                    }
+                });
+
+                // Atualizando a posição do foguete no mapa
+                if (GPSlat.length > 0 && GPSlng.length > 0) {
+                    const latestLat = parseFloat(GPSlat[GPSlat.length - 1]);
+                    const latestLng = parseFloat(GPSlng[GPSlng.length - 1]);
+                    markerPosicaoFoguete.setLatLng([latestLat, latestLng]);
+                    map.setView([latestLat, latestLng]);
+                }
+
+                // Chamando a função para atualizar os gráficos
+                updateCharts();
+            }
+        };
+
+        document.getElementById('liftOffButton').addEventListener('click', () => {
+            ws.send(JSON.stringify({ action: 'liftOff' }));
+        });
+
+        document.getElementById('stopButton').addEventListener('click', () => {
+            ws.send(JSON.stringify({ action: 'stop' }));
+        });
+    </script>
 </body>
 </html>

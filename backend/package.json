@@ -4,7 +4,7 @@
   "description": "Projeto EletroRocket",
   "main": "src/electron/main.js",
   "scripts": {
-    "start": "electron --require dotenv/config .",
+    "start": "node src/controllers/server/server-express & electron --require dotenv/config .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rafael Fassini Menoce",
@@ -13,9 +13,18 @@
     "electron": "^30.0.8"
   },
   "dependencies": {
+    "@cubejs-client/core": "^0.35.23",
+    "apexcharts": "^3.50.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "env-var": "^7.4.1",
-    "pg": "^8.11.5",  
-    "three": "^0.164.1"
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.5",
+    "serialport": "^12.0.0",
+    "socket.io": "^4.7.5",
+    "three": "^0.164.1",
+    "ws": "^8.18.0"
   }
 }

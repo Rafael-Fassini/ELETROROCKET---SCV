@@ -19,6 +19,8 @@ const createWindow = (routehtmlPage) => {
       }
     });
 
+    mainWindow.loadURL('http://localhost:3000');
+
     mainWindow.loadFile(routehtmlPage);
 
     mainWindow.on('closed', () => {
@@ -31,7 +33,7 @@ const createWindow = (routehtmlPage) => {
 
 
 app.whenReady().then(() => {
-  createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'mainMenu.html'));
+  createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'executeMission', 'executeMission.html'));
 
   ipcMain.handle('abrirJanelaCriarMissao', () => {
     createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'createMission', 'createMission.html'));

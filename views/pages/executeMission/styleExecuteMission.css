@@ -3,21 +3,27 @@ body {
     font-family: 'Orbitron', sans-serif;
     background-color: #000;
     color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-#stopButton {
-    background-color: red;
+#temperatureChart, #velocityChart, #temperatureChart, #altitudeChart, #pressureChart, #map {
+    width: 100%;
+    height: 100%;
 }
 
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 20px;
     padding: 1vh;
+    margin-bottom: 10px;
 }
 
 .buttons button {
     background-color: green;
-    border: none;       
+    border: none;
     border-radius: 10px;
     color: white;
     font-size: 1.3em;
@@ -26,45 +32,39 @@ body {
     transition: background-color 0.3s;
 }
 
+#stopButton {
+    background-color: red;
+}
+
 .buttons button:hover {
-    background-color: green;
+    background-color: darkgreen;
+}
+
+#stopButton:hover {
+    background-color: darkred;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 10px;
+    padding: 2vh;
     box-sizing: border-box;
+    flex-grow: 1;
+    padding-bottom: 2vh;
 }
 
-.row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 100%;                                                   
-}
-
-
-.row > div {
+.container > div {
+    padding-top: 2px;
     background-color: #242424;
     border-radius: 10px;
-    margin: 10px;
-    flex: 1 1 30%;
-    min-width: 250px; 
-    min-height: 250px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
+    justify-content: center;
+    height: 100%; 
 }
-
 
 .FormatacaoDadosVoo {
     color: white;
@@ -76,3 +76,12 @@ body {
     font-size: 1.5em;
     font-weight: bold;
 }
+
+.gps {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
