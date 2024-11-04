@@ -212,6 +212,7 @@
                 name: "Temperatura",
                 data: temperatureData
             }]);
+            console.log("teste update Charts temperatura", temperatureData);
 
             velocityChart.updateSeries([{
                 name: "Velocidade",
@@ -236,39 +237,38 @@
             if (message.type === 'data') {
                 const { time, GPSlat, GPSlng, altitude, GPSspeed, pressao, temperatura } = message.value;
 
-                // Atualizando dados de temperatura
                 temperatura.forEach((temp, index) => {
                     temperatureData.push({ x: time[index], y: parseFloat(temp) });
                     if (temperatureData.length > MAX_DATA_POINTS) {
                         temperatureData.shift();
                     }
+                    console.log("passei no loop 1");
                 });
 
-                // Atualizando dados de altitude
                 altitude.forEach((alt, index) => {
                     altitudeData.push({ x: time[index], y: parseFloat(alt) });
                     if (altitudeData.length > MAX_DATA_POINTS) {
                         altitudeData.shift();
                     }
+                    console.log("passei no loop 2");
                 });
 
-                // Atualizando dados de velocidade
                 GPSspeed.forEach((speed, index) => {
                     velocityData.push({ x: time[index], y: parseFloat(speed) });
                     if (velocityData.length > MAX_DATA_POINTS) {
                         velocityData.shift();
                     }
+                    console.log("passei no loop 3");
                 });
 
-                // Atualizando dados de pressão
                 pressao.forEach((pressure, index) => {
                     pressureData.push({ x: time[index], y: parseFloat(pressure) });
                     if (pressureData.length > MAX_DATA_POINTS) {
                         pressureData.shift();
                     }
+                    console.log("passei no loop 4");
                 });
 
-                // Atualizando a posição do foguete no mapa
                 if (GPSlat.length > 0 && GPSlng.length > 0) {
                     const latestLat = parseFloat(GPSlat[GPSlat.length - 1]);
                     const latestLng = parseFloat(GPSlng[GPSlng.length - 1]);
@@ -276,7 +276,6 @@
                     map.setView([latestLat, latestLng]);
                 }
 
-                // Chamando a função para atualizar os gráficos
                 updateCharts();
             }
         };

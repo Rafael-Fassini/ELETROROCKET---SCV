@@ -10,13 +10,10 @@ const server = app.listen(3000, (err) => {
     } else {
         console.log('App Express is running!');
         
-        // Inicia o WebSocket Server somente se o servidor Express iniciou corretamente
         const wss = appWs(server);
         
-        // Inicia a porta serial após o servidor e WebSocket estarem prontos
-        iniciarPortaSerial(wss); // Passa a instância do WebSocket Server
-
-        // Manipulador para finalizar corretamente os servidores
+        iniciarPortaSerial(wss); 
+       
         process.on('SIGINT', () => {
             console.log('Encerrando o servidor...');
 

@@ -17,7 +17,16 @@ const insertDataCreateMissionInDB = async (formData) => {
   } catch (error) {
     console.error('Erro ao inserir no banco de dados:', error);
   };
-};
+}
+
+const insertDataCircularBuferinDB = async (formData) => {
+  try {
+    await pool.query(`INSERT INTO "CadastroMissao" ("nomeMissao", "objetivoMissao", "apogeuPrevisto", "horaVoo", "dataVoo", "altitudeRelacaoNivelMar") 
+    VALUES ($1, $2, $3, $4, $5, $6)`, [formData.nomeMissao, formData.objetivoMissao, formData.apogeuPrevisto, formData.hora, formData.data, formData.altitudeRelacaoNivelMar]);
+  } catch (error) {
+    console.error('Erro ao inserir no banco de dados:', error);
+  };
+}
 
 const selectDataCreateMissionInDB = async () => {
   try {
@@ -27,7 +36,7 @@ const selectDataCreateMissionInDB = async () => {
     console.error('Erro ao resgatar dados no banco de dados:', error);
     return [];
   }
-};
+}
 
 const verificarDadosNaTabela = async () => {
   try {
@@ -38,7 +47,14 @@ const verificarDadosNaTabela = async () => {
     console.error('Erro ao verificar os dados na tabela:', error);
     return false;
   }
-};
+}
+
+//const insertDataLiftOffInDB = async () => {
+ // try {
+//    await pool.query(`INSERT INTO "CadastroMissao" ("nomeMissao", "objetivoMissao", "apogeuPrevisto", "horaVoo", "dataVoo", "altitudeRelacaoNivelMar") 
+ //     VALUES ($1, $2, $3, $4, $5, $6)`, [formData.nomeMissao, formData.objetivoMissao, formData.apogeuPrevisto, formData.hora, formData.data, formData.altitudeRelacaoNivelMar]);
+  //}
+//}
 
 module.exports = { 
   insertDataCreateMissionInDB,

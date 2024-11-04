@@ -4,7 +4,6 @@ const { insertDataCreateMissionInDB, selectDataCreateMissionInDB } = require('..
 const { error } = require('node:console');
 
 
-
 let mainWindow = null;
 
 const createWindow = (routehtmlPage) => {
@@ -71,12 +70,16 @@ app.whenReady().then(() => {
       throw error;
     };
   });
+  ipcMain.on('autoSaveDataLiftOff', (dataLiftOff) => {
+    
+  })
+
 });
 
 
 app.on('activate', () => {
   if (mainWindow === null) {
-    createWindow('views/mainMenu.html');
+    createWindow(path.join(__dirname, '..', '..', '..', 'views', 'pages', 'mainMenu.html'));
   }
 });
 

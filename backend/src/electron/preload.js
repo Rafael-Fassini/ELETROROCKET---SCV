@@ -35,6 +35,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   voltarAoMenuPrincipal: () => {
     ipcRenderer.invoke('voltarAoMenuPrincipal');
+  },
+
+  autoSaveDataLiftOff: () => {
+    ws.onmessage = (event) => {
+      const dataLiftOff = JSON.parse(event.data);
+      if (dataLiftOff.type === 'data') {
+        ipcRenderer.send('dataLiftOff', dataLiftOff);
+
+      }
+      
+
+    }
   }
 
 });
