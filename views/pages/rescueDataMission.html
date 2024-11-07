@@ -11,7 +11,7 @@
   <div class="logo-eletrorocket"> <img src="img/EletroRocket.png"></div>
 
   <div class="sidebar">
-    <button type="button" id="btnSidebar">
+    <button type="button" id="btnSidebar">Menu</button>
   </div>
   
   <div id="popupContainerExit" class="popup-container">
@@ -24,7 +24,30 @@
     </div>
   </div>
 
+  <!-- Botão para baixar o arquivo -->
+  <div>
+    <button id="downloadBtn">Baixar Arquivo de Dados</button>
+  </div>
+
   <script src="../components/renderer.js"></script>
+  <script>
+    // Função para criar o link de download do arquivo de texto
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      const texto = 'Exemplo de dados armazenados no arquivo. Isso pode ser alterado conforme seu uso.\n';
+
+      // Criação do Blob com o conteúdo do arquivo
+      const blob = new Blob([texto], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      // Criação do link para o download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dados_recebidos.txt'; // Nome do arquivo a ser baixado
+      document.body.appendChild(a); // Adiciona o link ao corpo da página
+      a.click(); // Simula o clique para iniciar o download
+      document.body.removeChild(a); // Remove o link após o clique
+    });
+  </script>
 
 </body>
 </html>

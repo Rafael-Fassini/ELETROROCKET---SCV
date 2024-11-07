@@ -18,7 +18,7 @@ const createWindow = (routehtmlPage) => {
       }
     });
 
-    mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL('http://localhost:3010');
 
     mainWindow.loadFile(routehtmlPage);
 

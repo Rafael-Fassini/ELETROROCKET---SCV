@@ -1,5 +1,8 @@
 const { SerialPort } = require('serialport');
 const WebSocket = require('ws');
+const { saveData } = require('../repositories/database');
+const { selectLastMission } = require('../repositories/database');
+const fs = require('fs');
 
 let port;
 let wss; 
@@ -13,9 +16,11 @@ class CircularBuffer {
         this.length = 0;
     }
 
-    postIn() {
+    async postIn(data) {
         if (this.size >= 50) {
-            //CHAmar gravar
+            const last = await selectLastMission();
+            saveData(parseInt(last), data);
+
         }
     }
 
@@ -58,9 +63,19 @@ let GPStimeBuffer = new CircularBuffer(bufferSize);
 let GPSspeedBuffer = new CircularBuffer(bufferSize);
 let GPSsatellitesBuffer = new CircularBuffer(bufferSize);
 
+let dataBuffer = new CircularBuffer(bufferSize)
+
 function processarDados(data) {
     const dataString = data.toString('utf8').trim();
     console.log('Dados recebidos:', dataString);
+
+    fs.appendFile('dados_recebidos.txt', dataString, (err) => {
+        if (err) {
+          console.error('Erro ao gravar os dados no arquivo:', err);
+        } else {
+          console.log('Dados gravados com sucesso!');
+        }
+      });
 
     const linhas = dataString.split('\n');
     linhas.forEach(linha => {
@@ -95,7 +110,7 @@ function processarDados(data) {
     timeBuffer.push(Date.now());
 
 if (wss && wss.clients) {
-    ss.clients.forEach(client => {
+    wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({
                 type: 'data',

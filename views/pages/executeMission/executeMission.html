@@ -20,13 +20,16 @@
 </head>
 <body>
     <div class="buttons">
-        <button id="liftOffButton">Lift Off</button>
         <button id="stopButton">Stop</button>
     </div>
     <div class="container">
         <div class="foguete3d">
-            <p>FOGUETE 3D:</p>
-            <p class="FormatacaoDadosVoo">desenho 3d</p>
+            <p>FOGUETE 3D - MPU6050</p>
+            <div id="rocketChart"></div>
+        </div>
+        <div class="giroscopio">
+            <p>GIROSCÓPIO - MPU6050</p>
+            <div id="gyroscopeChart"></div>
         </div>
         <div class="velocidade">
             <p>VELOCIDADE (m/s):</p>
@@ -35,10 +38,6 @@
         <div class="altimetro">
             <p>ALTITUDE (metros):</p>
             <div id="altitudeChart"></div>
-        </div>
-        <div class="giroscopio">
-            <p>GIROSCÓPIO:</p>
-            <p class="FormatacaoDadosVoo">gráfico 3d trajetória</p>
         </div>
         <div class="pressao">
             <p>PRESSÃO (Pa):</p>
@@ -54,7 +53,7 @@
     </div>
 
     <script>
-        const ws = new WebSocket('ws://localhost:3000');
+        const ws = new WebSocket('ws://localhost:3010');
 
         ws.onopen = () => {
             console.log('Conectado ao servidor WebSocket');
@@ -69,14 +68,12 @@
         };
 
         var map = L.map('map').setView([51.505, -0.09], 13);
-
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
         var markerPosicaoFoguete = L.marker([51.5, -0.09]).addTo(map);
-
         var circle = L.circle([51.5, -0.09], {
             color: 'blue',
             fillOpacity: 0.1,
@@ -90,11 +87,12 @@
         let velocityData = [];
         let altitudeData = [];
         let pressureData = [];
+        let gyroscopeData = { x: [], y: [], z: [] };
+        let rocketData = { x: [], y: [], z: [] };
         const MAX_DATA_POINTS = 50;
 
         const chartOptions = {
             chart: {
-                id: 'realtime',
                 height: 350,
                 type: 'line',
                 animations: {
@@ -109,184 +107,138 @@
                 },
                 zoom: {
                     enabled: false
-                },
-                events: {
-                    mouseMove: () => {}, 
-                    mouseClick: () => {}, 
-                    mouseLeave: () => {} 
                 }
             },
-            dataLabels: {
-                enabled: false
-            },
+            colors: ['#FF0000'],
             stroke: {
                 curve: 'smooth'
             },
             markers: {
-                size: 0 
+                size: 0
             },
             xaxis: {
                 type: 'datetime',
                 labels: {
                     datetimeUTC: false,
-                    style: {
-                        fontSize: '17px', 
-                        color: '#242424' 
-                    }
+                    style: { fontSize: '17px', color: '#242424' }
                 }
             },
             yaxis: {
+                min: 0,
                 labels: {
-                    style: {
-                        fontSize: '17px',
-                        color: '#242424'
-                    }
+                    style: { fontSize: '17px', color: '#242424' }
                 }
-            },
-            legend: {
-                show: false
-            },
-            tooltip: {
-                enabled: false
             }
         };
 
-        const chartOptionsTemperature = {
+        const chartOptionsGyroscope = {
             ...chartOptions,
-            series: [{
-                name: "Temperatura",
-                data: []
-            }],
-            yaxis: {
-                min: 0
-            }
+            series: [
+                { name: "Giro X", data: gyroscopeData.x },
+                { name: "Giro Y", data: gyroscopeData.y },
+                { name: "Giro Z", data: gyroscopeData.z }
+            ]
         };
 
-        const chartOptionsVelocity = {
+        const chartOptionsRocket = {
             ...chartOptions,
-            series: [{
-                name: "Velocidade",
-                data: []
-            }],
-            yaxis: {
-                min: 0
-            }
+            series: [
+                { name: "Foguete X", data: rocketData.x },
+                { name: "Foguete Y", data: rocketData.y },
+                { name: "Foguete Z", data: rocketData.z }
+            ]
         };
 
-        const chartOptionsAltitude = {
+        const gyroscopeChart = new ApexCharts(document.querySelector("#gyroscopeChart"), chartOptionsGyroscope);
+        gyroscopeChart.render();
+
+        const rocketChart = new ApexCharts(document.querySelector("#rocketChart"), chartOptionsRocket);
+        rocketChart.render();
+
+        const temperatureChart = new ApexCharts(document.querySelector("#temperatureChart"), {
             ...chartOptions,
-            series: [{
-                name: "Altitude",
-                data: []
-            }],
-            yaxis: {
-                min: 0
-            }
-        };
-
-        const chartOptionsPressure = {
-            ...chartOptions,
-            series: [{
-                name: "Pressão",
-                data: []
-            }],
-            yaxis: {
-                min: 0
-            }
-        };
-
-        const temperatureChart = new ApexCharts(document.querySelector("#temperatureChart"), chartOptionsTemperature);
+            series: [{ name: "Temperatura", data: temperatureData }]
+        });
         temperatureChart.render();
 
-        const velocityChart = new ApexCharts(document.querySelector("#velocityChart"), chartOptionsVelocity);
+        const velocityChart = new ApexCharts(document.querySelector("#velocityChart"), {
+            ...chartOptions,
+            series: [{ name: "Velocidade", data: velocityData }]
+        });
         velocityChart.render();
 
-        const altitudeChart = new ApexCharts(document.querySelector("#altitudeChart"), chartOptionsAltitude);
+        const altitudeChart = new ApexCharts(document.querySelector("#altitudeChart"), {
+            ...chartOptions,
+            series: [{ name: "Altitude", data: altitudeData }],
+            yaxis: { min: 0, max: 1000 } // Ajuste de escala
+        });
         altitudeChart.render();
 
-        const pressureChart = new ApexCharts(document.querySelector("#pressureChart"), chartOptionsPressure);
+        const pressureChart = new ApexCharts(document.querySelector("#pressureChart"), {
+            ...chartOptions,
+            series: [{ name: "Pressão", data: pressureData }]
+        });
         pressureChart.render();
 
         function updateCharts() {
-            temperatureChart.updateSeries([{
-                name: "Temperatura",
-                data: temperatureData
-            }]);
-            console.log("teste update Charts temperatura", temperatureData);
-
-            velocityChart.updateSeries([{
-                name: "Velocidade",
-                data: velocityData
-            }]);
-
-            altitudeChart.updateSeries([{
-                name: "Altitude",
-                data: altitudeData
-            }]);
-
-            pressureChart.updateSeries([{
-                name: "Pressão",
-                data: pressureData
-            }]);
+            temperatureChart.updateSeries([{ data: temperatureData }]);
+            velocityChart.updateSeries([{ data: velocityData }]);
+            altitudeChart.updateSeries([{ data: altitudeData }]);
+            pressureChart.updateSeries([{ data: pressureData }]);
+            gyroscopeChart.updateSeries([
+                { data: gyroscopeData.x },
+                { data: gyroscopeData.y },
+                { data: gyroscopeData.z }
+            ]);
+            rocketChart.updateSeries([
+                { data: rocketData.x },
+                { data: rocketData.y },
+                { data: rocketData.z }
+            ]);
         }
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log('Mensagem recebida do servidor:', message);
-
             if (message.type === 'data') {
-                const { time, GPSlat, GPSlng, altitude, GPSspeed, pressao, temperatura } = message.value;
-
-                temperatura.forEach((temp, index) => {
-                    temperatureData.push({ x: time[index], y: parseFloat(temp) });
-                    if (temperatureData.length > MAX_DATA_POINTS) {
-                        temperatureData.shift();
-                    }
-                    console.log("passei no loop 1");
-                });
-
-                altitude.forEach((alt, index) => {
-                    altitudeData.push({ x: time[index], y: parseFloat(alt) });
-                    if (altitudeData.length > MAX_DATA_POINTS) {
-                        altitudeData.shift();
-                    }
-                    console.log("passei no loop 2");
-                });
-
-                GPSspeed.forEach((speed, index) => {
-                    velocityData.push({ x: time[index], y: parseFloat(speed) });
-                    if (velocityData.length > MAX_DATA_POINTS) {
-                        velocityData.shift();
-                    }
-                    console.log("passei no loop 3");
-                });
-
-                pressao.forEach((pressure, index) => {
-                    pressureData.push({ x: time[index], y: parseFloat(pressure) });
-                    if (pressureData.length > MAX_DATA_POINTS) {
-                        pressureData.shift();
-                    }
-                    console.log("passei no loop 4");
-                });
-
-                if (GPSlat.length > 0 && GPSlng.length > 0) {
-                    const latestLat = parseFloat(GPSlat[GPSlat.length - 1]);
-                    const latestLng = parseFloat(GPSlng[GPSlng.length - 1]);
-                    markerPosicaoFoguete.setLatLng([latestLat, latestLng]);
-                    map.setView([latestLat, latestLng]);
+                const { time, gyroX, gyroY, gyroZ, rocketX, rocketY, rocketZ, altitude, GPSspeed, pressao, temperatura } = message.value;
+        
+                // Atualizando dados do giroscópio
+                gyroscopeData.x.push({ x: time, y: gyroX });
+                gyroscopeData.y.push({ x: time, y: gyroY });
+                gyroscopeData.z.push({ x: time, y: gyroZ });
+        
+                // Atualizando dados do foguete
+                rocketData.x.push({ x: time, y: rocketX });
+                rocketData.y.push({ x: time, y: rocketY });
+                rocketData.z.push({ x: time, y: rocketZ });
+        
+                // Atualizando dados de velocidade, pressão, temperatura e altitude
+                velocityData.push({ x: time, y: GPSspeed });
+                pressureData.push({ x: time, y: pressao });
+                temperatureData.push({ x: time, y: temperatura });
+                altitudeData.push({ x: time, y: altitude });
+        
+                // Limitando o número de pontos de dados
+                if (gyroscopeData.x.length > MAX_DATA_POINTS) {
+                    gyroscopeData.x.shift();
+                    gyroscopeData.y.shift();
+                    gyroscopeData.z.shift();
                 }
-
+                if (rocketData.x.length > MAX_DATA_POINTS) {
+                    rocketData.x.shift();
+                    rocketData.y.shift();
+                    rocketData.z.shift();
+                }
+                if (velocityData.length > MAX_DATA_POINTS) velocityData.shift();
+                if (pressureData.length > MAX_DATA_POINTS) pressureData.shift();
+                if (temperatureData.length > MAX_DATA_POINTS) temperatureData.shift();
+                if (altitudeData.length > MAX_DATA_POINTS) altitudeData.shift();
+        
+                // Atualizando todos os gráficos
                 updateCharts();
             }
         };
-
-        document.getElementById('liftOffButton').addEventListener('click', () => {
-            ws.send(JSON.stringify({ action: 'liftOff' }));
-        });
-
-        document.getElementById('stopButton').addEventListener('click', () => {
-            ws.send(JSON.stringify({ action: 'stop' }));
-        });
+        
     </script>
 </body>
 </html>

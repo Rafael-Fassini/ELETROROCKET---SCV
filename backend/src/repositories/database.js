@@ -49,6 +49,26 @@ const verificarDadosNaTabela = async () => {
   }
 }
 
+const selectLastMission = async () => {
+  try {
+      const result = await pool.query('SELECT idMissao from CadastroMissao ORDER BY idMissao DESC LIMIT 1')
+      return result.rows[0].idMissao;
+  } catch (error) {
+      console.error('Erro ao resgatar a última missão:', error);
+      return 0;
+  }
+}
+
+const saveData = async (last, data) => {
+  try {
+      await pool.query(`INSERT INTO DadosVooApresentacaoTempoReal (idMissao, dataBuffer) 
+    VALUES (${last}, ${data})`)
+  } catch (error) {
+      console.error('Erro ao inserir no banco de dados:', error);
+  }
+}
+
+
 //const insertDataLiftOffInDB = async () => {
  // try {
 //    await pool.query(`INSERT INTO "CadastroMissao" ("nomeMissao", "objetivoMissao", "apogeuPrevisto", "horaVoo", "dataVoo", "altitudeRelacaoNivelMar") 
@@ -59,5 +79,7 @@ const verificarDadosNaTabela = async () => {
 module.exports = { 
   insertDataCreateMissionInDB,
   selectDataCreateMissionInDB,
-  verificarDadosNaTabela
+  verificarDadosNaTabela,
+  selectLastMission,
+  saveData
 };
